@@ -7,9 +7,17 @@ sc () {
   clear
 }
 
+echo 'Checking permissions..'
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root." 
    exit 1
+fi
+
+echo 'Checking internet..'
+if ! ping -c 1 archlinux.org &>/dev/null; then
+  echo 'You must have internet.'
+  echo 'On wifi, run "iwctl station wlan0 connect <NAME_OF_YOUR_WIFI>" and then enter your password'
+  exit 1
 fi
 
 echo 'Setting larger font..'
@@ -84,33 +92,53 @@ sc
 
 echo 'Installing base-system..'
 
-# Base system
-pacstrap -K /mnt base linux-zen linux-lts
+PACKAGES=(
+  # Base & Kernel
+  base linux-zen linux-zen-headers linux-lts
+  linux-firmware-intel intel-ucode sof-firmware
+  base-devel git e2fsprogs xfsprogs dosfstools android-udev efibootmgr polkit
 
-# Firmware
-pacstrap /mnt linux-firmware-intel intel-ucode sof-firmware
+  # Audio / Video
+  pipewire wireplumber pipewire-audio pipewire-pulse pipewire-jack pipewire-alsa pipewire-v4l2
 
-# Development tools
-pacstrap /mnt base-devel git linux-zen-headers
-
-# Audio and Video
-pacstrap /mnt pipewire wireplumber pipewire-audio pipewire-pulse pipewire-jack pipewire-alsa pipewire-v4l2
-
-# System Utilities
-pacstrap /mnt e2fsprogs xfsprogs dosfstools android-udev efibootmgr polkit
-
-# User Utilities
-pacstrap /mnt neovim brightnessctl networkmanager man-db man-pages texinfo wiremix android-tools \
+  # Utilities & CLI
+  neovim brightnessctl networkmanager man-db man-pages texinfo wiremix android-tools \
   less noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-liberation ttf-dejavu ttf-ibmplex-mono-nerd \
   ttf-sharetech-mono-nerd wl-clipboard
 
-# Graphical Environment (sway based desktop)
-pacstrap /mnt firefox sway swaylock swayidle swaybg swayimg swaync wmenu foot polkit-gnome slurp wf-recorder \
+  # Sway Desktop
+  firefox sway swaylock swayidle swaybg swayimg swaync wmenu foot polkit-gnome slurp wf-recorder \
   grim nwg-displays
-
+)
+pacstrap -K /mnt "${PACKAGES[@]}"
 sync; sync
 sc
 
 echo 'Creating fstab file..'
 genfstab -L /mnt >> /mnt/etc/fstab
 sc
+
+echo 'Setting up next phase..'
+cp ./install-2 /mnt/root/install
+chmod +x /mnt/root/install
+sc
+
+echo 'Chroooooooting..'
+arch-chroot -S /mnt /root/install
+sc
+
+# This portion of the script resumes after chroot finishes
+
+echo 'CLean up..'
+rm -f /mnt/root/install
+umount -R /mnt
+swapoff -a
+sc
+
+echo 'Rebooting system. Remove installation media in..'
+for i in {3..1}; do
+  echo "$i..."
+  sleep 1
+done
+echo 'Remove. Goodbye!'
+reboot
