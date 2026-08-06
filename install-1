@@ -96,7 +96,7 @@ PACKAGES=(
   # Base & Kernel
   base linux-zen linux-zen-headers linux-lts
   linux-firmware-intel intel-ucode sof-firmware
-  base-devel git e2fsprogs xfsprogs dosfstools android-udev efibootmgr polkit
+  base-devel git e2fsprogs xfsprogs dosfstools android-udev efibootmgr polkit grub
 
   # Audio / Video
   pipewire wireplumber pipewire-audio pipewire-pulse pipewire-jack pipewire-alsa pipewire-v4l2
@@ -104,7 +104,7 @@ PACKAGES=(
   # Utilities & CLI
   neovim brightnessctl networkmanager man-db man-pages texinfo wiremix android-tools \
   less noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-liberation ttf-dejavu ttf-ibmplex-mono-nerd \
-  ttf-sharetech-mono-nerd wl-clipboard bash-completion
+  ttf-sharetech-mono-nerd wl-clipboard bash-completion tuned btop fastfetch lm_sensors
 
   # Sway Desktop
   firefox sway swaylock swayidle swaybg swayimg swaync wmenu foot polkit-gnome slurp wf-recorder \
@@ -129,7 +129,7 @@ sc
 
 # This portion of the script resumes after chroot finishes
 
-echo 'CLean up..'
+echo 'Clean up..'
 rm -f /mnt/root/install
 umount -R /mnt
 swapoff -a
