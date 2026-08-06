@@ -104,7 +104,7 @@ PACKAGES=(
   # Utilities & CLI
   neovim brightnessctl networkmanager man-db man-pages texinfo wiremix android-tools \
   less noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-liberation ttf-dejavu ttf-ibmplex-mono-nerd \
-  ttf-sharetech-mono-nerd wl-clipboard
+  ttf-sharetech-mono-nerd wl-clipboard bash-completion
 
   # Sway Desktop
   firefox sway swaylock swayidle swaybg swayimg swaync wmenu foot polkit-gnome slurp wf-recorder \
