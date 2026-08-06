@@ -108,9 +108,14 @@ PACKAGES=(
 
   # Sway Desktop
   firefox sway swaylock swayidle swaybg swayimg swaync wmenu foot polkit-gnome slurp wf-recorder \
-  grim nwg-displays
+  grim nwg-displays bluetui
 )
 pacstrap -K /mnt "${PACKAGES[@]}"
+read -rp 'Was pacstrap successful? [y/n] ' psuc
+while [ $psuc = 'n' ]; do
+  pacstrap -K /mnt "${PACKAGES[@]}"
+  read -rp 'Was pacstrap successful? [y/n] ' psuc
+done
 sync; sync
 sc
 
