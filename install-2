@@ -23,3 +23,44 @@ echo 'Managing Networks..'
 echo 'lookinglass' > /etc/hostname
 systemctl enable NetworkManager.service
 sc
+
+echo 'Regenerating initramfs..'
+mkinitcpio -P; sync
+sc
+
+echo 'Enter root user password..'
+passwd
+sc
+
+echo 'Making new non-root user..'
+useradd -mG wheel,audio,video -s /bin/bash orion
+sync
+sc
+
+echo 'Enter new user password..'
+passwd orion
+sc
+
+echo 'Adding new user to the sudoers..'
+echo '%wheel ALL=(ALL:ALL) ALL' >> /etc/sudoers
+sc
+
+echo 'Installing bootloader (grub)..'
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub_arch
+sync; udevadm settle; sync
+grub-mkconfig -o /boot/grub/grub.cfg
+sc
+
+echo 'Enabling user services for pipewire..'
+echo 'Enter your non-root user passwd if asked..'
+su orion
+systemctl --user enable pipewire.service
+systemctl --user enable pipewire-pulse.service
+systemctl --user enable wireplumber.service
+sync
+exit
+sc
+
+echo 'Our work here is done..'
+echo 'Exiting chroot..'
+exit
