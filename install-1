@@ -3,7 +3,7 @@
 set -eo pipefail
 
 sc () {
-  sleep 1
+  sleep 3
   clear
 }
 
@@ -102,12 +102,13 @@ PACKAGES=(
   pipewire wireplumber pipewire-audio pipewire-pulse pipewire-jack pipewire-alsa pipewire-v4l2
 
   # Utilities & CLI
-  neovim brightnessctl networkmanager man-db man-pages texinfo wiremix android-tools \
-  less noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-liberation ttf-dejavu ttf-ibmplex-mono-nerd \
+  neovim brightnessctl networkmanager man-db man-pages texinfo wiremix android-tools
+  less noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-liberation ttf-dejavu ttf-ibmplex-mono-nerd
   ttf-sharetech-mono-nerd wl-clipboard bash-completion tuned btop fastfetch lm_sensors
+  wget curl
 
   # Sway Desktop
-  firefox sway swaylock swayidle swaybg swayimg swaync wmenu foot polkit-gnome slurp wf-recorder \
+  firefox sway swaylock swayidle swaybg swayimg swaync wmenu foot polkit-gnome slurp wf-recorder
   grim nwg-displays bluetui
 )
 pacstrap -K /mnt "${PACKAGES[@]}"
