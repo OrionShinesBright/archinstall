@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -eo pipefail
+
+sc () {
+  sleep 1
+  clear
+}
+
+echo 'Managing timezone..'
+ln -sf /usr/share/zoneinfo/Asia/Karachi /etc/localtime
+hwclock --systohc
+sc
+
+echo 'Managing Locales..'
+echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen; sync
+locale-gen; sync
+echo 'LANG=en_US.UTF-8' > /etc/locale.conf
+echo 'KEYMAP=us' > /etc/vconsole.conf
+sc
+
+echo 'Managing Networks..'
+echo 'lookinglass' > /etc/hostname
+systemctl enable NetworkManager.service
+sc
