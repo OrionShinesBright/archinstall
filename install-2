@@ -3,7 +3,7 @@
 set -eo pipefail
 
 sc () {
-  sleep 1
+  sleep 3
   clear
 }
 
@@ -42,7 +42,10 @@ passwd orion
 sc
 
 echo 'Adding new user to the sudoers..'
-echo '%wheel ALL=(ALL:ALL) ALL' > /etc/sudoers.d/00-wheel.conf
+echo 'A file will open. Go to end of file, and uncomment the line:'
+echo '>>>> %wheel ALL=(ALL:ALL) ALL'
+sleep 5
+EDITOR=nvim visudo
 sc
 
 echo 'Installing bootloader (grub)..'
