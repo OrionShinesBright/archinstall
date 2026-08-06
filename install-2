@@ -42,7 +42,7 @@ passwd orion
 sc
 
 echo 'Adding new user to the sudoers..'
-echo '%wheel ALL=(ALL:ALL) ALL' >> /etc/sudoers
+echo '%wheel ALL=(ALL:ALL) ALL' > /etc/sudoers.d/00-wheel.conf
 sc
 
 echo 'Installing bootloader (grub)..'
@@ -53,10 +53,9 @@ sc
 
 echo 'Enabling user services for pipewire..'
 echo 'Enter your non-root user passwd if asked..'
-su orion
-systemctl --user enable pipewire.service
-systemctl --user enable pipewire-pulse.service
-systemctl --user enable wireplumber.service
+su orion --command 'systemctl --user enable pipewire.service'
+su orion --command 'systemctl --user enable pipewire-pulse.service'
+su orion --command 'systemctl --user enable wireplumber.service'
 sync
 exit
 sc
